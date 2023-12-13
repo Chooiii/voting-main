@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voting Form</title>
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='stile.css') }}"
+    />
+
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      
+      
+    </style>
+  </head>
+
+  <body>  
+    <div class="small-container" id="smoll-container">
+      <div class="btnkoto">
+        <button id="returnBtn" onclick="returnToOriginal()">Continue <img src="../static/rarrow.png" id="rarrow"></button>
+       </div>
+       <div class="btn1">
+      <a href="{{url_for('logout')}}" class="login">Login</a>
+    </div>
+      <img src="../static/wisely.png" class="waysli" style="width: 300px; height: 100px; position: absolute;margin-left: 30px;margin-top: -20px;">
+        
+        <div class="conImg">
+          <img src="../static/ASD.png" class="picko" />
+
+        </div>
+        <div class="con">
+          <h2 class="title2">Remeber that your</h2>
+          <h2 class="title3">vote matters a lot.</h2>
+          
+        </div>
+    
+
+   
+    </div>
+
+    <div id="form-container" class="bigcontainer" style="margin-left: -200%;">
+    <div class="pa" style="margin-bottom: 100px;">
+    
+    <h1 data-text="Voting Section" id="pamagat">Voting Section
+    </h1>
+    </div>
+    <div class="pps">
+      <div class="logo"></div>
+      
+      <div class="row1">
+        <div class="content">
+          
+        </div>
+      </div>
+    </div>
+    <div class="mc">
+      {% with messages = get_flashed_messages() %} {% if messages %} {% for
+      message in messages %}
+      <div
+        class="alert alert-success alert-dismissable asdasdasdsad"
+        role="alert"
+        
+      >
+        <button
+          type="button"
+          class="close"
+          data-dismiss="alert"
+          aria-label="close"
+        >
+          <span aria-hidden="true" style="transform: translateY(-400px)"
+            ><p class="koko">&times;</p></span
+          >
+        </button>
+        {{message}}
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <form method="POST" action="{{ url_for('update_values') }}">
+        <div class="sd" style="">
+          <div class="marnell">
+          
+            <p>Select :</p>
+            {% for table, values in numbercheck_data.items() %} {% if table != 'botomo' and table != 'user' %}
+
+            <p style="color: black" class="check">
+              -<span class="values"><i>{{ values }}</i></span>
+              <span class="spanssssss">Candidate's From : </span>
+              <span class="tableee"><i>{{table}}</i></span>
+            </p>
+
+            {% endif %} {% endfor %}
+          </div>
+       </div>
+       <div class="inpt">
+          <div class="form__group" id="inpiy" style="transform: translateY(-400px); margin-left: -450px;">
+            <input
+              type="text"
+              class="form__input"
+              id="idid"
+              name="idnumber"
+              placeholder="Voter's ID"
+              required=""
+            />
+            <label for="name" class="form__label">Voter's ID</label>
+          </div>
+        </div>
+       
+        <div class="eto" >
+          <div class="bot">
+            <button type="submit" class="custom-btn btn-7 qweewew" id="sub" >submit</button>
+          </div>
+        </div>
+
+          {% if tables_and_rows %} {% for position, data in
+          tables_and_rows.items() %} {% if position != "botomo" and position != 'user' %}
+      <div class="haha">
+        <h2 class="se" id="scrooling" style="margin-top: 150px;font-weight: bold;font-family: Arial, Helvetica, sans-serif;color: black ;margin-left: 350px;">Position: {{ position }}</h2>
+      </div>
+        <!-- Table for Each Position -->
+        <div class="malaek">
+        {% if data %}
+        <table class="table" style="box-shadow: -10px 20px 20px grey,-5px 10px 10px black;">
+          <thead>
+            <tr>
+              <th>Action</th>
+              <th class="namenamename">Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in data %}
+            <tr class="rowroworwyoutboat">
+              <td>
+                <div class="checkbox-container">
+                  <input
+                    type="checkbox"
+                    id="{{ 'c_' + position + '_' + loop.index|string }}"
+                    name="{{ position }}"
+                    value="{{ row.1 }}"
+                    class="checkbox limit-checkbox"
+                    data-limit="{{ numbercheck_data.get(position, 0) }}"
+                    {%
+                    if
+                    row.checked
+                    %}
+                    checked
+                    {%
+                    endif
+                    %}
+                  />
+                  <label for="{{ 'c_' + position + '_' + loop.index|string }}">
+                    <span></span>
+                  </label>
+                </div>
+              </td>
+              <td class="namename">{{ row.1 }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+        {% else %}
+        <p>No Candidate. Please Add Candidate for Position: {{ position }}.</p>
+        {% endif %} {% endif %} {% endfor %} {% else %}
+        <p>No tables available.</p>
+        {% endif %}
+      </form>
+    </div>
+    </div>
+    
+    <script>
+      document.getElementById('idid').addEventListener('input', function() {
+          var inputValue = this.value.trim();
+  
+          if (!/^[0-9]*$/.test(inputValue)) {
+              alert('Yoiu can only type numbers in this field!!!');
+              this.value = inputValue.replace(/\D/g, ''); // Remove non-numeric characters
+          }
+      });
+  </script>
+    <script>
+      function BACK() {
+        var formContainer = document.getElementById("form-container");
+          formContainer.style.transition = "margin-left 0.5s";
+          formContainer.style.marginLeft = "-200%"; 
+        var smollcontainer = document.getElementById("smoll-container");
+          smollcontainer.style.transition = "margin-left 0.5s";
+          smollcontainer.style.marginLeft = "0";   
+        var button = document.getElementById("returnBtn");
+          button.textContent = "Continue";
+        var input = document.getElementById('idid');
+           input.value = '';
+           document.getElementById("returnBtn").style.backgroundColor = "green";    
+
+        // Uncheck the checkbox
+        var checkboxes = document.querySelectorAll('.limit-checkbox');
+        checkboxes.forEach(function(checkbox) {
+            checkbox.checked = false;
+        });
+      }
+  </script>
+    <script>
+      function returnToOriginal() {
+        var formContainer = document.getElementById("form-container");
+          formContainer.style.transition = "margin-left 0.5s";
+          formContainer.style.marginLeft = "0"; 
+        var smollcontainer = document.getElementById("smoll-container");
+          smollcontainer.style.transition = "margin-left 0.5s";
+          smollcontainer.style.marginLeft = "200%"; 
+        var button = document.getElementById("returnBtn");
+          button.textContent = "clicked";
+          document.getElementById("returnBtn").style.backgroundColor = "red";   
+          
+          if (window.matchMedia('(max-width: 768px)').matches) {
+    // Execute specific scripts for screens with a maximum width of 768 pixels
+        var smollcontainer = document.getElementById("smoll-container");
+          smollcontainer.style.transition = "margin-left 0.5s";
+          smollcontainer.style.marginLeft = "800%"; 
+        var formContainer = document.getElementById("form-container");
+          formContainer.style.transition = "margin-left 0.5s";
+          formContainer.style.marginLeft = "60%";
+        var submit = document.getElementById("sub");
+          submit.style.transition = "margin-left 0.5s";
+          submit.style.marginLeft = "-200px" ;
+          submit.style.position = "block";
+
+        
+      
+    // Example: Adjusting styles or behavior for smaller screens
+    document.getElementById('returnBtn').style.fontSize = '14px';
+}
+
+      }
+  </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          // Add click event listener to the button
+          document.getElementById('returnBtn').addEventListener('click', function() {
+              // Check if the content of the button is "hays"
+              if (this.innerHTML.toLowerCase() === 'hays') {
+                // Disable scrolling by setting overflow property to hidden
+                document.body.style.overflow = 'hidden';
+            } else if (this.innerHTML.toLowerCase() === 'clicked') {
+                // Enable scrolling by setting overflow property to auto
+                document.body.style.overflowY = 'auto';
+                
+            } 
+          });  
+      });
+      if (window.matchMedia('(max-width: 600px)').matches) {
+        document.addEventListener('DOMContentLoaded', function() {
+          // Add click event listener to the button
+          document.getElementById('returnBtn').addEventListener('click', function() {
+              // Check if the content of the button is "hays"
+              if (this.innerHTML.toLowerCase() === 'hays') {
+                // Disable scrolling by setting overflow property to hidden
+                document.body.style.overflow = 'hidden';
+            } else if (this.innerHTML.toLowerCase() === 'clicked') {
+                // Enable scrolling by setting overflow property to auto
+                document.body.style.overflowY = 'auto';
+                
+            } 
+          });  
+      });
+      
+      }
+
+  </script>
+   
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get all checkboxes with the 'limit-checkbox' class
+        var checkboxes = document.querySelectorAll(".limit-checkbox");
+
+        checkboxes.forEach(function (checkbox) {
+          // Attach a change event listener to each checkbox
+          checkbox.addEventListener("change", function () {
+            // Get the maximum allowed check count from the data-limit attribute
+            var maxCheckCount = parseInt(this.dataset.limit);
+
+            // Count the number of checked checkboxes within the same group (name attribute)
+            var checkedCount = document.querySelectorAll(
+              'input[name="' + this.name + '"]:checked'
+            ).length;
+
+            // If the checked count exceeds the maximum, uncheck the current checkbox
+            if (checkedCount > maxCheckCount) {
+              this.checked = false;
+            }
+          });
+        });
+      });
+    </script>
+    <script>
+      window.addEventListener("scroll", function () {
+        var contentHeight = document.querySelector(".mc").offsetHeight;
+        var fixedDiv = document.querySelector(".sd");
+
+        // Calculate the scroll position as a percentage of content height
+        var scrollPercentage = (window.scrollY / contentHeight) * 100;
+
+        // If scroll position is greater than or equal to 40%, apply sticky position
+        if (scrollPercentage >= 30) {
+          fixedDiv.style.position = "sticky";
+          fixedDiv.style.top = "-25%";
+        } else {
+          fixedDiv.style.position = "static";
+          fixedDiv.style.top = "auto";
+        }
+      });
+    </script>
+    <script>
+      window.addEventListener("scroll", function () {
+        var contentHeight = document.querySelector(".mc").offsetHeight;
+        var fixedDiv = document.querySelector(".bot");
+
+        // Calculate the scroll position as a percentage of content height
+        var scrollPercentage = (window.scrollY / contentHeight) * 100;
+
+        // If scroll position is greater than or equal to 40%, apply sticky position
+        if (scrollPercentage >= 30) {
+          fixedDiv.style.position = "sticky";
+          fixedDiv.style.top = "-10%";
+        } else {
+          fixedDiv.style.position = "static";
+          fixedDiv.style.top = "auto";
+        }
+      });
+    </script>
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  </body>
+</html>
